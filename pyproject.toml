@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "repobox"
+version = "0.2.0"
+description = "Turn a Python or Node.js repository into a bootable Raspberry Pi OS image or deployable service."
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Repo2Box contributors" }]
+keywords = ["raspberry-pi", "deployment", "edge", "iot", "developer-tools"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Build Tools",
+]
+dependencies = []
+
+[project.scripts]
+repobox = "repobox.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/miguel200874-cell/repobox"
+Issues = "https://github.com/miguel200874-cell/repobox/issues"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

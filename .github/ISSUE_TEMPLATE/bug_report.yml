@@ -1,0 +1,45 @@
+name: Bug report
+description: Report a reproducible Repo2Box problem
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping make Repo2Box more reliable.
+  - type: input
+    id: version
+    attributes:
+      label: Repo2Box version
+      placeholder: 0.2.0
+    validations:
+      required: true
+  - type: dropdown
+    id: target
+    attributes:
+      label: Raspberry Pi target
+      options:
+        - Pi 4
+        - Pi 5
+        - Build machine only
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the command, sanitized manifest, and complete error output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: secrets
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed passwords, tokens, private keys, and other secrets.
+          required: true

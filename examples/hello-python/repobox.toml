@@ -1,0 +1,18 @@
+schema_version = 1
+
+[app]
+name = "Repo2Box Hello"
+runtime = "python"
+start = "python3 app.py"
+port = 8080
+healthcheck = "/health"
+description = "A zero-dependency device status page"
+
+[build]
+system_packages = ["python3", "python3-venv", "python3-pip"]
+ignore = [".git", ".github", ".env", ".env.*", "*.key", "*.pem", "node_modules", ".venv", "venv", "__pycache__", "dist", "build"]
+
+[device]
+targets = ["pi4", "pi5"]
+
+[environment]

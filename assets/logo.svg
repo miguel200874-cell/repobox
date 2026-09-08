@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 180" role="img" aria-labelledby="title desc">
+  <title id="title">Repo2Box</title>
+  <desc id="desc">A repository bracket flowing into a physical box</desc>
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <rect width="760" height="180" rx="28" fill="#07151c"/>
+  <g transform="translate(40 34)" fill="none" stroke="url(#g)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M45 5H18A13 13 0 0 0 5 18v76a13 13 0 0 0 13 13h27"/>
+    <path d="M68 27l29 29-29 29"/>
+    <path d="M96 56h45"/>
+    <path d="M163 21l43-16 43 16v67l-43 19-43-19z"/>
+    <path d="M163 21l43 18 43-18M206 39v68"/>
+  </g>
+  <text x="320" y="105" fill="#f0fbff" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="64" font-weight="750" letter-spacing="-3">Repo<tspan fill="url(#g)">2Box</tspan></text>
+  <text x="324" y="137" fill="#83a8b2" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="17" letter-spacing="2">REPOSITORY → DEVICE</text>
+</svg>
