@@ -55,7 +55,7 @@ class ImageTests(unittest.TestCase):
 
             self.assertTrue(app.is_file())
             self.assertTrue(unit.is_file())
-            self.assertIn("layer: pi4", config)
+            self.assertIn("layer: rpi4", config)
             self.assertIn("hostname: demo-pi", config)
             self.assertIn("X-Env-Layer-Name: repobox-app", layer)
             self.assertIn("chroot --userspec=repobox:repobox", layer)
