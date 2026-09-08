@@ -84,6 +84,12 @@ mmdebstrap:
   customize-hooks:
     - |
         set -eu
+        overlay="$SRCROOT/layer/repobox-app.rootfs-overlay"
+        if [ ! -d "$overlay" ]; then
+          echo "Repo2Box overlay not found: $overlay" >&2
+          exit 1
+        fi
+        cp -a "$overlay/." "$1/"
         if ! grep -q '^repobox:' "$1/etc/group"; then
           chroot "$1" groupadd --system repobox
         fi

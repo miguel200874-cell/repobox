@@ -58,6 +58,8 @@ class ImageTests(unittest.TestCase):
             self.assertIn("layer: rpi4", config)
             self.assertIn("hostname: demo-pi", config)
             self.assertIn("X-Env-Layer-Name: repobox-app", layer)
+            self.assertIn('cp -a "$overlay/." "$1/"', layer)
+            self.assertLess(layer.index('cp -a "$overlay/." "$1/"'), layer.index("chown -R"))
             self.assertIn("chroot --userspec=repobox:repobox", layer)
             self.assertIn("enable-units", layer)
             self.assertIn('enable-units "$1" avahi-daemon', layer)
