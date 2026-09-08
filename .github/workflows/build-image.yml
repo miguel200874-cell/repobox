@@ -1,0 +1,85 @@
+name: Build Raspberry Pi image
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: Local path or public HTTPS Git repository
+        required: true
+        default: examples/hello-python
+      target:
+        description: Raspberry Pi model
+        required: true
+        type: choice
+        options:
+          - pi5
+          - pi4
+      hostname:
+        description: Hostname embedded in the image
+        required: true
+        default: repobox
+      ssh_public_key:
+        description: Optional OpenSSH public key for the pi user (never a private key)
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  image:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 120
+    steps:
+      - name: Check out Repo2Box
+        uses: actions/checkout@v4
+
+      - name: Install Repo2Box
+        run: python3 -m pip install .
+
+      - name: Check out the official image engine
+        run: |
+          git clone --branch v2.7.0 --depth 1 https://github.com/raspberrypi/rpi-image-gen.git image-engine
+          test "$(git -C image-engine rev-parse HEAD)" = "a7b6d4806183195f3efadb533f58c8e46393d057"
+
+      - name: Install image build dependencies
+        working-directory: image-engine
+        run: |
+          sudo apt-get update
+          sudo chmod o+x /home/runner
+          sudo ./install_deps.sh
+
+      - name: Build bootable image
+        env:
+          REPOBOX_SOURCE: ${{ inputs.source }}
+          REPOBOX_TARGET: ${{ inputs.target }}
+          REPOBOX_HOSTNAME: ${{ inputs.hostname }}
+          REPOBOX_SSH_PUBLIC_KEY: ${{ inputs.ssh_public_key }}
+        run: |
+          args=(
+            image "$REPOBOX_SOURCE"
+            --target "$REPOBOX_TARGET"
+            --hostname "$REPOBOX_HOSTNAME"
+            --engine-dir "$GITHUB_WORKSPACE/image-engine"
+            --output-dir "$GITHUB_WORKSPACE/image-output"
+            --force
+          )
+          if [ -n "$REPOBOX_SSH_PUBLIC_KEY" ]; then
+            echo "$REPOBOX_SSH_PUBLIC_KEY" > "$RUNNER_TEMP/repobox-admin.pub"
+            args+=(--ssh-public-key "$RUNNER_TEMP/repobox-admin.pub")
+          fi
+          repobox "${args[@]}"
+
+      - name: Compress and checksum image
+        run: |
+          xz -T0 -6 --force image-output/*.img
+          (cd image-output && sha256sum *.img.xz > SHA256SUMS)
+
+      - name: Upload image
+        uses: actions/upload-artifact@v4
+        with:
+          name: repobox-${{ inputs.target }}-image
+          path: |
+            image-output/*.img.xz
+            image-output/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 14
