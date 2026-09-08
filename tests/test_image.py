@@ -129,8 +129,10 @@ class ImageTests(unittest.TestCase):
             engine = root / "engine"
             engine.mkdir()
             (engine / "rpi-image-gen").write_text("#!/bin/sh\n", encoding="utf-8")
+            commands = []
 
             def fake_run(command, **_kwargs):
+                commands.append(command)
                 if "build" in command:
                     generated = engine / "work" / f"image-{plan.image_name}" / f"{plan.image_name}.img"
                     generated.parent.mkdir(parents=True)
@@ -144,6 +146,8 @@ class ImageTests(unittest.TestCase):
 
             self.assertEqual(result.path.read_bytes(), b"bootable-image")
             self.assertEqual(result.sha256, hashlib.sha256(b"bootable-image").hexdigest())
+            build_command = next(command for command in commands if "build" in command)
+            self.assertNotIn("-f", build_command)
 
 
 if __name__ == "__main__":

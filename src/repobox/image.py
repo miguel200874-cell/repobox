@@ -206,7 +206,7 @@ Target: {target}
 Image name: {image_name}.img
 
 From the rpi-image-gen repository:
-  ./rpi-image-gen build -S {workspace} -c repobox.yaml -f
+  ./rpi-image-gen build -S {workspace} -c repobox.yaml
 
 The expected output is:
   work/image-{image_name}/{image_name}.img
@@ -249,7 +249,7 @@ def build_image(plan: ImagePlan, engine_dir: Path, output_dir: Path) -> ImageRes
         raise ImageBuildError(f"rpi-image-gen rejected the generated layer (exit {lint.returncode}).")
     try:
         build = subprocess.run(
-            [str(executable), "build", "-S", str(plan.workspace), "-c", plan.config_path.name, "-f"],
+            [str(executable), "build", "-S", str(plan.workspace), "-c", plan.config_path.name],
             cwd=engine_dir,
             check=False,
         )
