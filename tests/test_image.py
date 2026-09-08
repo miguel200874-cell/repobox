@@ -62,6 +62,17 @@ class ImageTests(unittest.TestCase):
             self.assertIn("enable-units", layer)
             self.assertIn('enable-units "$1" avahi-daemon', layer)
 
+    def test_maps_public_targets_to_official_device_layers(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp) / "project"
+            root.mkdir()
+            manifest = self._project(root)
+            pi4 = prepare_image_source(root, manifest, "pi4", Path(temp) / "pi4")
+            pi5 = prepare_image_source(root, manifest, "pi5", Path(temp) / "pi5")
+
+            self.assertIn("layer: rpi4", pi4.config_path.read_text(encoding="utf-8"))
+            self.assertIn("layer: rpi5", pi5.config_path.read_text(encoding="utf-8"))
+
     def test_workspace_requires_force_to_replace(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp) / "project"

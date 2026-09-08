@@ -18,6 +18,7 @@ from .manifest import Manifest
 
 RPI_IMAGE_GEN_VERSION = "v2.7.0"
 RPI_IMAGE_GEN_COMMIT = "a7b6d4806183195f3efadb533f58c8e46393d057"
+DEVICE_LAYER_BY_TARGET = {"pi4": "rpi4", "pi5": "rpi5"}
 HOSTNAME_PATTERN = re.compile(r"[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?")
 SSH_KEY_PATTERN = re.compile(
     r"(?:ssh-ed25519|ssh-rsa|ecdsa-sha2-nistp(?:256|384|521)|"
@@ -102,10 +103,11 @@ mmdebstrap:
 
 
 def _config(image_name: str, target: str, hostname: str, ssh_enabled: bool) -> str:
+    device_layer = DEVICE_LAYER_BY_TARGET[target]
     admin = "  user1sudo: nopasswd\n" if ssh_enabled else ""
     ssh = "\nssh:\n  pubkey_user1: ${@SRCROOT}/ssh-authorized-key.pub\n  pubkey_only: y\n" if ssh_enabled else ""
     return f"""device:
-  layer: {target}
+  layer: {device_layer}
   hostname: {hostname}
 {admin}
 image:
